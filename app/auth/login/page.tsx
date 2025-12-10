@@ -28,8 +28,8 @@ export default function LoginPage() {
       if (data.user) {
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      setError(err.message || "ログインに失敗しました");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "ログインに失敗しました");
     } finally {
       setLoading(false);
     }

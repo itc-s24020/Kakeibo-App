@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -34,6 +34,7 @@ export default function SignupPage() {
     }
 
     try {
+      console.log("新規登録開始:", email);
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -42,17 +43,28 @@ export default function SignupPage() {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("登録エラー:", error);
+        throw error;
+      }
 
-      if (data.user) {
+      console.log("登録成功:", data);
+
+      // メール確認が不要な場合は直接ダッシュボードへ
+      if (data.session) {
+        console.log("セッション確立済み、ダッシュボードへ");
+        router.push("/dashboard");
+      } else {
+        // メール確認が必要な場合
+        console.log("メール確認が必要");
         setSuccess(true);
-        // 3秒後にログインページへリダイレクト
         setTimeout(() => {
           router.push("/auth/login");
         }, 3000);
       }
-    } catch (err: any) {
-      setError(err.message || "登録に失敗しました");
+    } catch (err) {
+      console.error("キャッチされたエラー:", err);
+      setError(err instanceof Error ? err.message : "登録に失敗しました");
     } finally {
       setLoading(false);
     }
@@ -65,12 +77,12 @@ export default function SignupPage() {
           <div className="text-6xl mb-4">✅</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">登録完了！</h2>
           <p className="text-gray-600 mb-6">
-            確認メールを送信しました。
+            アカウントが作成されました。
             <br />
-            メール内のリンクをクリックして、アカウントを有効化してください。
+            ログインページにリダイレクトしています...
           </p>
           <p className="text-sm text-gray-500">
-            ログインページにリダイレクトしています...
+            ※メール確認が有効な場合は、受信したメールのリンクをクリックしてアカウントを有効化してください。
           </p>
         </div>
       </div>
