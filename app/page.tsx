@@ -1,94 +1,100 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      {/* ヘッダー */}
+      <header className="container mx-auto px-4 py-6">
+        <nav className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <span className="text-3xl">🐻</span>
+            <span className="text-2xl font-bold text-gray-800">ためるん</span>
+          </div>
+          <div className="flex gap-4">
+            <Link
+              href="/auth/login"
+              className="px-6 py-2 text-gray-700 hover:text-gray-900 font-medium transition"
+            >
+              ログイン
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition"
+            >
+              無料で始める
+            </Link>
+          </div>
+        </nav>
+      </header>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* ヒーローセクション */}
+      <main className="container mx-auto px-4 py-20">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="text-8xl mb-8">🐻💰</div>
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            楽しく貯める、
+            <br />
+            計画的に管理する
+          </h1>
+          <p className="text-xl text-gray-600 mb-12">
+            「今月いくら使ったか分からない」「なかなか貯金ができない」
+            <br />
+            そんな悩みを解決する、シンプルな家計簿アプリです。
+          </p>
+          <Link
+            href="/auth/signup"
+            className="inline-block px-8 py-4 bg-blue-600 text-white text-lg rounded-xl hover:bg-blue-700 font-medium transition shadow-lg hover:shadow-xl"
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
+            今すぐ無料で始める →
+          </Link>
+        </div>
+
+        {/* 特徴セクション */}
+        <div className="grid md:grid-cols-3 gap-8 mt-24">
+          <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <div className="text-5xl mb-4">📊</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">見える化</h3>
+            <p className="text-gray-600">
+              支出をグラフで可視化。どこにお金を使っているか一目で分かります。
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <div className="text-5xl mb-4">🎯</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">目標設定</h3>
+            <p className="text-gray-600">
+              具体的な貯金目標を設定して、達成率をリアルタイムで確認できます。
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <div className="text-5xl mb-4">🔔</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">予算管理</h3>
+            <p className="text-gray-600">
+              カテゴリー別に予算を設定。使いすぎる前に通知でお知らせします。
+            </p>
+          </div>
+        </div>
+
+        {/* CTAセクション */}
+        <div className="text-center mt-24">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            さあ、始めましょう
+          </h2>
+          <Link
+            href="/auth/signup"
+            className="inline-block px-8 py-4 bg-blue-600 text-white text-lg rounded-xl hover:bg-blue-700 font-medium transition"
           >
-            Read our docs
-          </a>
+            無料アカウントを作成
+          </Link>
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* フッター */}
+      <footer className="container mx-auto px-4 py-8 mt-20 border-t border-gray-200">
+        <div className="text-center text-gray-600">
+          <p>&copy; 2024 ためるん. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
