@@ -4,7 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabase";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, parseISO } from "date-fns";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameDay,
+  parseISO,
+} from "date-fns";
 import { ja } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Edit2, Trash2 } from "lucide-react";
 import type { Database } from "@/types/database";
@@ -26,13 +33,18 @@ export default function HistoryPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [transactions, setTransactions] = useState<TransactionWithCategory[]>([]);
+  const [transactions, setTransactions] = useState<TransactionWithCategory[]>(
+    [],
+  );
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [dailyTotals, setDailyTotals] = useState<Map<string, DailyTotal>>(new Map());
+  const [dailyTotals, setDailyTotals] = useState<Map<string, DailyTotal>>(
+    new Map(),
+  );
   const [loading, setLoading] = useState(true);
-  const [editingTransaction, setEditingTransaction] = useState<TransactionWithCategory | null>(null);
+  const [editingTransaction, setEditingTransaction] =
+    useState<TransactionWithCategory | null>(null);
   const [categories, setCategories] = useState<CategoryRow[]>([]);
-  
+
   // 編集フォームの状態
   const [editAmount, setEditAmount] = useState("");
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
@@ -63,10 +75,12 @@ export default function HistoryPage() {
 
       const { data, error } = await supabase
         .from("transactions")
-        .select(`
+        .select(
+          `
           *,
           category:categories(*)
-        `)
+        `,
+        )
         .eq("user_id", user.id)
         .gte("date", firstDay)
         .lte("date", lastDay)
@@ -82,18 +96,22 @@ export default function HistoryPage() {
       const totals = new Map<string, DailyTotal>();
       txs.forEach((tx) => {
         const dateKey = tx.date;
-        const existing = totals.get(dateKey) || { income: 0, expense: 0, net: 0 };
-        
+        const existing = totals.get(dateKey) || {
+          income: 0,
+          expense: 0,
+          net: 0,
+        };
+
         if (tx.type === "income") {
           existing.income += Number(tx.amount);
         } else {
           existing.expense += Number(tx.amount);
         }
         existing.net = existing.income - existing.expense;
-        
+
         totals.set(dateKey, existing);
       });
-      
+
       setDailyTotals(totals);
     } catch (err) {
       console.error("Error fetching transactions:", err);
@@ -109,12 +127,16 @@ export default function HistoryPage() {
   }, [user, fetchTransactions]);
 
   const handlePreviousMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
+    );
     setSelectedDate(null);
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
+    );
     setSelectedDate(null);
   };
 
@@ -186,13 +208,13 @@ export default function HistoryPage() {
     const start = startOfMonth(currentMonth);
     const end = endOfMonth(currentMonth);
     const days = eachDayOfInterval({ start, end });
-    
+
     // 月の最初の日の曜日を取得（0: 日曜日）
     const firstDayOfWeek = start.getDay();
-    
+
     // 空白のセルを追加
     const blanks = Array(firstDayOfWeek).fill(null);
-    
+
     return [...blanks, ...days];
   };
 
@@ -265,7 +287,11 @@ export default function HistoryPage() {
               <div
                 key={day}
                 className={`text-center text-sm font-bold ${
-                  index === 0 ? "text-red-500" : index === 6 ? "text-blue-500" : "text-gray-600"
+                  index === 0
+                    ? "text-red-500"
+                    : index === 6
+                      ? "text-blue-500"
+                      : "text-gray-600"
                 }`}
               >
                 {day}
@@ -347,7 +373,9 @@ export default function HistoryPage() {
 
           {filteredTransactions.length === 0 ? (
             <p className="py-8 text-center text-sm text-gray-500">
-              {selectedDate ? "この日の履歴はありません" : "まだ履歴がありません"}
+              {selectedDate
+                ? "この日の履歴はありません"
+                : "まだ履歴がありません"}
             </p>
           ) : (
             <div className="space-y-4">
@@ -366,7 +394,10 @@ export default function HistoryPage() {
                 const total = dailyTotals.get(date);
 
                 return (
-                  <div key={date} className="border-b border-gray-100 pb-4 last:border-b-0">
+                  <div
+                    key={date}
+                    className="border-b border-gray-100 pb-4 last:border-b-0"
+                  >
                     {/* 日付ヘッダー */}
                     <div className="mb-3 flex items-center justify-between">
                       <h3 className="font-medium text-gray-900">
@@ -376,7 +407,9 @@ export default function HistoryPage() {
                         <div className="flex items-center gap-3 text-sm">
                           {total.income > 0 && (
                             <div className="flex items-center gap-1">
-                              <span className="text-xs text-gray-500">収入</span>
+                              <span className="text-xs text-gray-500">
+                                収入
+                              </span>
                               <span className="font-semibold text-blue-600">
                                 +¥{total.income.toLocaleString()}
                               </span>
@@ -384,7 +417,9 @@ export default function HistoryPage() {
                           )}
                           {total.expense > 0 && (
                             <div className="flex items-center gap-1">
-                              <span className="text-xs text-gray-500">支出</span>
+                              <span className="text-xs text-gray-500">
+                                支出
+                              </span>
                               <span className="font-semibold text-red-600">
                                 -¥{total.expense.toLocaleString()}
                               </span>
@@ -438,7 +473,9 @@ export default function HistoryPage() {
                             </button>
                             <button
                               onClick={() =>
-                                handleDeleteTransaction(transaction.transaction_id)
+                                handleDeleteTransaction(
+                                  transaction.transaction_id,
+                                )
                               }
                               className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
                             >
@@ -493,7 +530,10 @@ export default function HistoryPage() {
                   {categories
                     .filter((cat) => cat.type === editingTransaction.type)
                     .map((category) => (
-                      <option key={category.category_id} value={category.category_id}>
+                      <option
+                        key={category.category_id}
+                        value={category.category_id}
+                      >
                         {category.icon} {category.name}
                       </option>
                     ))}
