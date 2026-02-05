@@ -6,7 +6,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabase";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { Calendar } from "lucide-react";
 import type { Database } from "@/types/database";
 
 type TransactionType = "income" | "expense";
@@ -197,26 +196,12 @@ export default function TransactionInputPage() {
               <label className="block text-sm font-medium text-gray-700">
                 日付
               </label>
-              <div className="mt-1 flex gap-2">
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="block flex-1 rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const input = document.querySelector(
-                      'input[type="date"]',
-                    ) as HTMLInputElement;
-                    input?.showPicker();
-                  }}
-                  className="flex items-center justify-center rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  <Calendar className="h-5 w-5" />
-                </button>
-              </div>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
               <p className="mt-1 text-sm text-gray-500">
                 {format(new Date(date), "yyyy年M月d日(E)", { locale: ja })}
               </p>
